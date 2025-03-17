@@ -69,6 +69,13 @@ async def log_transaction(update: Update, context: CallbackContext):
 
     await update.message.reply_text(f"✅ Transaction logged successfully!\n📌 {date} | {description} | {amount} | {category}")
 
+    # Trigger GitHub Actions
+    requests.post(
+        "https://api.github.com/repos/004Ajay/Sheet-Logger-Bot/dispatches",
+        headers={"Authorization": f"token {os.getenv('GITHUB_PERSONAL_ACCESS_TOKEN')}", "Accept": "application/vnd.github.v3+json"},
+        json={"event_type": "telegram-message"}
+    )
+
 def main():
     """ Runs the bot once when triggered """
     app = Application.builder().token(BOT_TOKEN).build()
