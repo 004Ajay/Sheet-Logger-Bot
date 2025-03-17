@@ -3,6 +3,7 @@ import json
 import base64
 import gspread
 import datetime
+import requests
 from dotenv import load_dotenv, find_dotenv
 from oauth2client.service_account import ServiceAccountCredentials
 from telegram import Update
