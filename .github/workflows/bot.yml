@@ -12,6 +12,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Debug Environment Variables
+        run: |
+          echo "BOT_API_KEY is set"
+          echo "GOOGLE_SHEETS_ID is set"
+          if [ -z "$GOOGLE_CREDENTIALS" ]; then
+            echo "GOOGLE_CREDENTIALS is EMPTY!"
+          else
+            echo "GOOGLE_CREDENTIALS is LOADED!"
+          fi  
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
