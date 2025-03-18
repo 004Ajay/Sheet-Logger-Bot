@@ -73,7 +73,7 @@ async def log_transaction(update: Update, context: CallbackContext):
     # Trigger GitHub Actions
     requests.post(
         "https://api.github.com/repos/004Ajay/Sheet-Logger-Bot/dispatches",
-        headers={"Authorization": f"token {os.getenv('GITHUB_PERSONAL_ACCESS_TOKEN')}", "Accept": "application/vnd.github.v3+json"},
+        headers={"Authorization": f"token {os.getenv('PERSONAL_ACCESS_TOKEN_GITHUB')}", "Accept": "application/vnd.github.v3+json"},
         json={"event_type": "telegram-message"}
     )
 
