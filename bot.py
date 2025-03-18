@@ -1,6 +1,6 @@
 import os
 import json
-import base64
+# import base64
 import gspread
 import datetime
 import requests
@@ -13,20 +13,33 @@ load_dotenv(find_dotenv())
 
 BOT_TOKEN = os.getenv("BOT_API_KEY")
 SHEET_ID = os.getenv("GOOGLE_SHEETS_ID")
-SHEET_NAME = "Data"
 
-google_encoded_key = os.getenv("GOOGLE_CREDENTIALS")
+GOOGLE_CREDENTIALS = os.getenv("GOOGLE_CREDENTIALS")
 
-google_encoded_key = str(google_encoded_key)[2:-1] # remove the first two chars and the last char in the key
+# Convert JSON string back to dictionary
+google_credentials_dict = json.loads(GOOGLE_CREDENTIALS)
 
-google_credentials_dict=json.loads(base64.b64decode(google_encoded_key).decode('utf-8')) # decode
-
-# print(google_credentials_dict['private_key_id'])
-
+# Authenticate with Google Sheets
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-credentials = ServiceAccountCredentials.from_json_keyfile_dict(google_credentials_dict, scope) 
+credentials = ServiceAccountCredentials.from_json_keyfile_dict(google_credentials_dict, scope)
 client = gspread.authorize(credentials)
-sheet = client.open_by_key(SHEET_ID).worksheet(SHEET_NAME)
+sheet = client.open_by_key(SHEET_ID).worksheet("Data")
+
+
+# SHEET_NAME = "Data"
+
+# google_encoded_key = os.getenv("GOOGLE_CREDENTIALS")
+
+# google_encoded_key = str(google_encoded_key)[2:-1] # remove the first two chars and the last char in the key
+
+# google_credentials_dict=json.loads(base64.b64decode(google_encoded_key).decode('utf-8')) # decode
+
+# # print(google_credentials_dict['private_key_id'])
+
+# scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+# credentials = ServiceAccountCredentials.from_json_keyfile_dict(google_credentials_dict, scope) 
+# client = gspread.authorize(credentials)
+# sheet = client.open_by_key(SHEET_ID).worksheet(SHEET_NAME)
 
 async def start(update: Update, context: CallbackContext):
     """ Handles the /start command """
