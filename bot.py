@@ -1,6 +1,6 @@
 import os
 import json
-# import base64
+import base64
 import gspread
 import datetime
 import requests
@@ -13,6 +13,7 @@ load_dotenv(find_dotenv())
 
 BOT_TOKEN = os.getenv("BOT_API_KEY")
 SHEET_ID = os.getenv("GOOGLE_SHEETS_ID")
+SHEET_NAME = "Data"
 
 # GOOGLE_CREDENTIALS = os.getenv("GOOGLE_CREDENTIALS")
 
@@ -26,8 +27,6 @@ SHEET_ID = os.getenv("GOOGLE_SHEETS_ID")
 # sheet = client.open_by_key(SHEET_ID).worksheet("Data")
 
 # -----------------------
-
-# SHEET_NAME = "Data"
 
 # google_encoded_key = os.getenv("GOOGLE_CREDENTIALS")
 
@@ -59,7 +58,7 @@ google_credentials_dict = json.loads(google_credentials_json)
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 credentials = ServiceAccountCredentials.from_json_keyfile_dict(google_credentials_dict, scope)
 client = gspread.authorize(credentials)
-sheet = client.open_by_key(SHEET_ID).worksheet("Data")
+sheet = client.open_by_key(SHEET_ID).worksheet(SHEET_NAME)
 
 async def start(update: Update, context: CallbackContext):
     """ Handles the /start command """
