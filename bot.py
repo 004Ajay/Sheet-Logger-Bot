@@ -14,17 +14,18 @@ load_dotenv(find_dotenv())
 BOT_TOKEN = os.getenv("BOT_API_KEY")
 SHEET_ID = os.getenv("GOOGLE_SHEETS_ID")
 
-GOOGLE_CREDENTIALS = os.getenv("GOOGLE_CREDENTIALS")
+# GOOGLE_CREDENTIALS = os.getenv("GOOGLE_CREDENTIALS")
 
-# Convert JSON string back to dictionary
-google_credentials_dict = json.loads(GOOGLE_CREDENTIALS)
+# # Convert JSON string back to dictionary
+# google_credentials_dict = json.loads(GOOGLE_CREDENTIALS)
 
-# Authenticate with Google Sheets
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-credentials = ServiceAccountCredentials.from_json_keyfile_dict(google_credentials_dict, scope)
-client = gspread.authorize(credentials)
-sheet = client.open_by_key(SHEET_ID).worksheet("Data")
+# # Authenticate with Google Sheets
+# scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+# credentials = ServiceAccountCredentials.from_json_keyfile_dict(google_credentials_dict, scope)
+# client = gspread.authorize(credentials)
+# sheet = client.open_by_key(SHEET_ID).worksheet("Data")
 
+# -----------------------
 
 # SHEET_NAME = "Data"
 
@@ -40,6 +41,25 @@ sheet = client.open_by_key(SHEET_ID).worksheet("Data")
 # credentials = ServiceAccountCredentials.from_json_keyfile_dict(google_credentials_dict, scope) 
 # client = gspread.authorize(credentials)
 # sheet = client.open_by_key(SHEET_ID).worksheet(SHEET_NAME)
+
+# =======================================
+
+GOOGLE_CREDENTIALS_BASE64 = os.getenv("GOOGLE_CREDENTIALS")  # Read Base64 encoded JSON
+
+if not GOOGLE_CREDENTIALS_BASE64:
+    raise ValueError("Error: GOOGLE_CREDENTIALS is missing. Check GitHub Secrets.")
+
+# Decode from Base64 to JSON
+google_credentials_json = base64.b64decode(GOOGLE_CREDENTIALS_BASE64).decode("utf-8")
+
+# Convert JSON string to dictionary
+google_credentials_dict = json.loads(google_credentials_json)
+
+# Authenticate with Google Sheets
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+credentials = ServiceAccountCredentials.from_json_keyfile_dict(google_credentials_dict, scope)
+client = gspread.authorize(credentials)
+sheet = client.open_by_key(SHEET_ID).worksheet("Data")
 
 async def start(update: Update, context: CallbackContext):
     """ Handles the /start command """
